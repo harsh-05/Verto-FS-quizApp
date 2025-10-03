@@ -20,18 +20,23 @@ enum UserRole {
 
 
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String  
-  role    UserRole
+  id                Int      @id @default(autoincrement())
+  email             String   @unique
+  name              String   
+  password          String
+  role              UserRole
+  studentresult     studentResult[]
+  studentselection  studentSelections[]
 }
 
 
 model Quiz {
     id            Int             @id @default(autoincrement())
-    quizname      String
+    quizDesc      String
     time_limit    Int?
     questions     Questions[]
+    studentresult studentResult[]
+
 }
 
 
@@ -39,9 +44,11 @@ model Questions {
     id                    Int         @id @default(autoincrement())
     quesdesc              String
     quizid                Int
+    score                 Int
     quiz                  Quiz        @relation(fields: [quizid], references: [id])
     questionoptions       questionOptions[]
     correctoption         correctOption[]
+    studentselection      studentSelections[]
 
 }
 
@@ -52,6 +59,7 @@ model questionOptions {
   quesid            Int
   ques              Questions @relation(fields: [quesid], references: [id])
   correctoption     correctOption[]
+  studentselection  studentSelections[]
 }
 
 
@@ -63,4 +71,31 @@ model correctOption {
     option              questionOptions   @relation(fields: [correctOptionid], references: [id]) 
 
     @@id([questionid, correctOptionid])
+}
+
+model studentResult {
+    studentId         Int
+    quizId            Int
+    timeTaken         Int
+    score             Int
+    corrects          Int
+    incorrects        Int
+
+
+    student           User    @relation(fields: [studentId], references: [id])
+    quiz              Quiz    @relation(fields: [quizId], references: [id])
+
+    @@unique([studentId, quizId])
+}
+
+model studentSelections {
+      studentId         Int 
+      quesId            Int
+      optionId          Int
+
+      student           User                @relation(fields: [studentId], references: [id])
+      question          Questions           @relation(fields: [quesId], references: [id])
+      option            questionOptions     @relation(fields: [optionId], references: [id])
+
+      @@unique([studentId, quesId, optionId])
 }

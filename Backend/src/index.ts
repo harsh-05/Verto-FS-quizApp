@@ -9,8 +9,8 @@ const prisma = new PrismaClient();
 
 const port = process.env.PORT || 3000;
 
-app.get("/", async (req, res) => {
-    
+app.get("/quizes", async (req, res) => {
+     
 })
 
 app.listen(port, () => {
