@@ -41,11 +41,11 @@ model Quiz {
 
 
 model Questions {
-    id                    Int         @id @default(autoincrement())
+    id                    Int                  @id @default(autoincrement())
     quesdesc              String
     quizid                Int
-    score                 Int
-    quiz                  Quiz        @relation(fields: [quizid], references: [id])
+    quesScore             Int
+    quiz                  Quiz                 @relation(fields: [quizid], references: [id])
     questionoptions       questionOptions[]
     correctoption         correctOption[]
     studentselection      studentSelections[]
@@ -55,7 +55,7 @@ model Questions {
 
 model questionOptions {
   id                Int       @id @default(autoincrement())
-  option            String
+  optionDesc        String
   quesid            Int
   ques              Questions @relation(fields: [quesid], references: [id])
   correctoption     correctOption[]
