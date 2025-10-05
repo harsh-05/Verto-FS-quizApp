@@ -1,7 +1,12 @@
 
 import { PrismaClient } from "@prisma/client";
 import express from "express";
+import { getJwtSecret } from "./config.js";
+import { authMiddleware } from "./middlewares/authMiddleware.js";
+import jwt from 'jsonwebtoken';
 
+
+export const JWT_Secret = getJwtSecret();
 
 const app = express();
 
@@ -9,16 +14,51 @@ const prisma = new PrismaClient();
 
 const port = process.env.PORT || 3000;
 
-
 app.use(express.json());
 
-app.get("/quizes", async (req, res) => {
+
+app.post("/signIn", async (req, res) => {
+    // we can use the Validation library like ZOD here for schema validation.
+    const body = req.body;
+
+    if (!body.email || !body.password) { 
+        res.status(404).send("Bad Request");
+        return;
+    }
+
+    const data = await prisma.user.findUnique({
+        where: {
+            email: body.email,
+            password: body.password
+        },
+        select: {
+            id: true,
+            role: true
+        }
+    });
+
+    if (data === null || !data) {
+        res.status(403).send("user not found");
+        return;
+    }
+
+    const token = jwt.sign({ UserId: data.id, UserRole: data.role }, JWT_Secret);
+
+    res.json(token);
+    return;
+
+})
+
+
+// using Middleware to use these end-points only by the authorized persons..
+
+app.get("/quizes", authMiddleware, async (req, res) => {
     const data = await prisma.quiz.findMany();
 
     res.status(201).json(data);
 })
 
-app.get("/quiz/:quizId", async (req, res) => {
+app.get("/quiz/:quizId", authMiddleware ,async (req, res) => {
     const quizId  = Number(req.params.quizId);
 
     const data = await prisma.questions.findUnique({
@@ -46,6 +86,11 @@ app.get("/quiz/:quizId", async (req, res) => {
     }
 
     res.status(200).json(data);
+})
+
+
+app.post("/result", authMiddleware, async (req, res) => {
+    const {}
 })
 
 app.listen(port, () => {
