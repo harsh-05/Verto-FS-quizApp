@@ -19,13 +19,13 @@ async function main() {
                 {
                     email: 'student1@school.edu',
                     name: 'Alice Johnson',
-                    password: '$2b$10$EXAMPLEHASHEDPASSWORD1',
+                    password: 'HASHEDPASSWORD1',
                     role: UserRole.student,
                 },
                 {
                     email: 'student2@school.edu',
                     name: 'Bob Smith',
-                    password: '$2b$10$EXAMPLEHASHEDPASSWORD2',
+                    password: 'HASHEDPASSWORD2',
                     role: UserRole.student,
                 },
                 {

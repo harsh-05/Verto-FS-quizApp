@@ -61,9 +61,9 @@ app.get("/quizes", authMiddleware, async (req, res) => {
 app.get("/quiz/:quizId", authMiddleware ,async (req, res) => {
     const quizId  = Number(req.params.quizId);
 
-    const data = await prisma.questions.findUnique({
+    const data = await prisma.questions.findMany({
         where: {
-            id: quizId
+            quizid: quizId
         },
         select: {
             id: true,
