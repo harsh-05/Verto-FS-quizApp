@@ -6,15 +6,22 @@
   "type": "module",
   "scripts": {
     "build": "tsc -b",
-    "dev": "npm run build && node dist/index.js"
+  "seed:build": "tsc -b",
+  "seed:run": "node dist/seed.js",
+  "seed": "npm run seed:build && npm run seed:run",
+  "dev": "npm run build && node dist/index.js"
+  },
+  "prisma": {
+    "seed": "npm run seed"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.6.2",
     "prisma": "^6.16.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",
