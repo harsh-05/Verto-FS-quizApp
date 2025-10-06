@@ -4,6 +4,7 @@ import express from "express";
 import { getJwtSecret } from "./config.js";
 import { authMiddleware } from "./middlewares/authMiddleware.js";
 import jwt from 'jsonwebtoken';
+import cors from 'cors'
 
 
 export const JWT_Secret = getJwtSecret();
@@ -13,6 +14,8 @@ const app = express();
 const prisma = new PrismaClient();
 
 const port = process.env.PORT || 3000;
+
+app.use(cors())
 
 app.use(express.json());
 
@@ -44,7 +47,7 @@ app.post("/signIn", async (req, res) => {
 
     const token = jwt.sign({ UserId: data.id, UserRole: data.role }, JWT_Secret);
 
-    res.json(token);
+    res.json({token, userId: data.id });
     return;
 
 })
