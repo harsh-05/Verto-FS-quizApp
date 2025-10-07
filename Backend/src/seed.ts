@@ -231,42 +231,7 @@ async function main() {
         })
 
         // Create student results with safe array access
-        const studentResults = await prisma.studentResult.createMany({
-            data: [
-                {
-                    studentId: createdUsers[0]!.id,
-                    quizId: createdQuizzes[0]!.id,
-                    timeTaken: 1500,
-                    score: 15,
-                    corrects: 3,
-                    incorrects: 2,
-                },
-                {
-                    studentId: createdUsers[1]!.id,
-                    quizId: createdQuizzes[0]!.id,
-                    timeTaken: 1700,
-                    score: 20,
-                    corrects: 4,
-                    incorrects: 1,
-                },
-                {
-                    studentId: createdUsers[0]!.id,
-                    quizId: createdQuizzes[1]!.id,
-                    timeTaken: 2000,
-                    score: 25,
-                    corrects: 5,
-                    incorrects: 0,
-                },
-                {
-                    studentId: createdUsers[1]!.id,
-                    quizId: createdQuizzes[1]!.id,
-                    timeTaken: 2200,
-                    score: 30,
-                    corrects: 6,
-                    incorrects: 0,
-                },
-            ],
-        })
+       
 
         console.log('Seeding completed successfully:')
         console.log(`- ${(await prisma.user.findMany()).length} users created`)

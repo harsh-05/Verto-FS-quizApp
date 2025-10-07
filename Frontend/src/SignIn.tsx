@@ -7,9 +7,9 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    
-    const navigate = useNavigate();
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   async function signin(e: any) {
     e.preventDefault();
@@ -25,20 +25,15 @@ export default function SignIn() {
     try {
       const response = await axios.post(`${URL}/signIn`, { email, password });
 
-    
       const { token, userId } = response.data;
 
- 
       localStorage.setItem("token", token);
-        localStorage.setItem("userId", userId);
-        
-        
+      localStorage.setItem("userId", userId);
 
-        console.log("signed in", { userId });
-        navigate('quizes');
+      console.log("signed in", { userId });
+      navigate("quizes");
     } catch (e) {
- 
-      const msg =  "Sign in failed";
+      const msg = "Sign in failed";
       setError(msg);
       console.error(e);
     } finally {
@@ -92,8 +87,6 @@ export default function SignIn() {
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
-
-          
         </form>
       </div>
     </div>
