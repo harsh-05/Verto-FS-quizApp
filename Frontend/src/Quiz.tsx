@@ -36,7 +36,6 @@ export default function Quiz() {
   const [error, setError] = useState<string>("");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selected, setSelected] = useState<Record<number, number | null>>({}); // { questionId: optionId | null }
-  const [submitting, setSubmitting] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
 
   const timerRef = useRef<number | null>(null);
@@ -86,8 +85,8 @@ export default function Quiz() {
   const handleSubmit = useCallback(
     async (e?: React.FormEvent) => {
       if (e && e.preventDefault) e.preventDefault();
-      if (!quiz || submitting || submitted) return;
-      setSubmitting(true);
+      if (!quiz || submitted) return;
+    
       setError("");
 
       const answers = quiz.questions.map((q) => ({
@@ -101,26 +100,9 @@ export default function Quiz() {
         answers,
       };
 
-      try {
-        const res = await axios.post(`${URL}/result`, payload, {
-          headers: { Authorization: getToken() },
-        });
-        console.log("result response:", res.data);
-        setSubmitted(true);
-      } catch (err: any) {
-        setError(
-          err?.response?.data?.message || err?.message || "Submit failed"
-        );
-        console.error(err);
-      } finally {
-        setSubmitting(false);
-        if (timerRef.current !== null) {
-          clearInterval(timerRef.current);
-          timerRef.current = null;
-        }
-      }
+      console.log(payload);
     },
-    [quiz, selected, submitting, submitted, quizId]
+    [quiz, selected, submitted, quizId]
   );
 
   // start timer when quiz loads; auto-submit when timer reaches 0
@@ -282,12 +264,10 @@ export default function Quiz() {
               ) : (
                 <button
                   type="submit"
-                  disabled={submitting || submitted}
+                  disabled={submitted}
                   className="px-4 py-2 rounded-md bg-green-600 text-white font-medium disabled:opacity-60"
                 >
-                  {submitting
-                    ? "Submitting..."
-                    : submitted
+                  {submitted
                     ? "Submitted"
                     : "Submit"}
                 </button>

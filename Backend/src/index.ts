@@ -103,7 +103,8 @@ app.get("/quiz/:quizId", authMiddleware ,async (req, res) => {
 
 
 app.post("/result", authMiddleware, async (req, res) => {
-    
+    const body = req.body.payload;
+    res.json(body);
 })
 
 app.listen(port, () => {
